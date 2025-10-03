@@ -1,0 +1,57 @@
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Knowledge_Vault]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>site-lib/media/favicon.png</url><title>Knowledge_Vault</title><link/></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Fri, 03 Oct 2025 13:44:17 GMT</lastBuildDate><atom:link href="site-lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 03 Oct 2025 13:44:17 GMT</pubDate><ttl>60</ttl><dc:creator/><item><title><![CDATA[00 Basic Interconnect]]></title><description><![CDATA[
+This is more or less a summarization of Chapter 4, of Arm Fundamentals of SoC textbook Requestor &amp; Completer
+The Component that is Requesting a resource/computation from another component, the completer, which completes this request.
+ARM SoC: Single Word Transaction
+The simplest form of transaction that we need an interconnect protocol to support is the movement of a single word from a requestor to a completer, that is, a single-word write transaction.
+To Support Single Word Write Transaction we can simply add
+The WR signal and the WRDATA are recieved on the same rising edge.
+To Support Single Word Write Transaction we can simply add
+The RD signal is received at rising edge 0 cycle 0, then the RDDATA on the next rising edge
+“Pasted image 20251002163252.png” could not be found.Assumption &amp; disadvantages This assumes the completer can read/execute the request every clock cycle (1) We’ve assumed until now that there is only is one location, that is, only one register, in the completer (2) Asynchronous Reads
+nothing prevents an interconnect protocol from permitting read data to be returned during cycle C (and, in fact, many protocols do allow this); however, this would imply that the overall read operation is asynchronous and we have stated that the interconnect we are building is synchronous.
+“Pasted image 20251002164032.png” could not be found.A Major Disadvantage with the current interconnect that its support for back-to-back rapid transaction is lack-luster and leaves clock cycles to be optimized.
+In the general case of a completer with an N-cycle end-to-end read latency, the maximum data throughput will be: To Mitigate this we can add a LENGTH Control Signal to signal to the completer how much data is given to it to write/read.“Pasted image 20251002164741.png” could not be found.“Pasted image 20251002164822.png” could not be found.We Know <a data-tooltip-position="top" aria-label="^DW2" data-href="#^DW2" href="#^DW2" class="internal-link" target="_self" rel="noopener nofollow">Assumption (1)</a> is not true as the completer may need to process the request for many clock cycles.Terminiology
+The mechanism through which a completer communicates its unavailability to a requestor is referred to as backpressure and a requestor waiting on a completer’s acknowledgement in this context is said to be stalled
+To realize this feature, all we need is to implement a READY signal.
+A transaction starts only when WR/RD and READY are both asserted in the same clock cycle.
+Avoid Infinite Requestor Stalling
+if a requestor wants to start a transaction, then it should assert its control signals and keep them asserted until the completer’s READY signal is asserted, Two Design Decesions are employed here: the requestor must not check the READY signal before deciding to assert its control signals because otherwise the completer may never know of the requestor’s intention to start a transaction
+transactions cannot be interrupted once started because a requestor cannot deassert its control signals early, and all data words must be transmitted for both entities to acknowledge the transaction has finished. “Pasted image 20251002190522.png” could not be found.
+Notice That the Completer Asserts/Deasserts the READY signal for each data write B C &amp; D.
+Reading from completors may also incur many clock cycles, There needs to be a control signal that registers that the data within the RDDATA bus is valid.For a read transaction, the RD signal does not convey the validity of the RDDATA bus, but rather the validity of the control signals relevant to starting a transaction (ADDR, LENGTH). We need an additional completer-to-requestor signal to convey the validity of the RDDATA bus.
+So RDDATAVALID is born: once completer fetches data, the RDDATAVALID, is asserted.
+“Pasted image 20251002192210.png” could not be found.<br>Next <a data-href="01 AHB-Lite Protocol" href="root/digital-design/interconnect/01-ahb-lite-protocol.html" class="internal-link" target="_self" rel="noopener nofollow">01 AHB-Lite Protocol</a>]]></description><link>root/digital-design/interconnect/00-basic-interconnect.html</link><guid isPermaLink="false">root/Digital Design/Interconnect/00 Basic Interconnect.md</guid><pubDate>Thu, 02 Oct 2025 16:34:10 GMT</pubDate></item><item><title><![CDATA[Iverilog & GtkWave Simulation]]></title><description><![CDATA[Make Sure your test-bench dumps waveform .vcd in the output, by appending: initial
+begin $dumpfile("&lt;module name&gt;_tb.vcd"); $dumpvars(0,test);
+end
+$ iverilog -o &lt;output_filename&gt; &lt;testbench&gt;.v &lt;verilog_sources&gt;.v $ vvp &lt;output_filename&gt; $ gtkwave &lt;vcd_filename&gt;.vcd &amp;
+Directory structure-rw-rw-r-- 1 waseem waseem 939 Oct 2 14:43 ahbl_master_tb.v
+-rw-rw-r-- 1 waseem waseem 291 Oct 2 14:43 readme.md
+drwxrwxr-x 2 waseem waseem 4.0K Oct 2 14:55 src/
+iverilog -o out ahbl_master_tb.v src/ahbl_master.v src/ahbl_slave.v src/ahbl_splitter_4.v
+OR you can use -I Option or wildcards *iverilog -o out ahbl_master_tb.v src/*.v
+gtkwave &lt;vcd_filename&gt;.vcd &amp;
+# Source files
+V_SOURCES = $(wildcard src/*.v)
+TB_SOURCE = ahbl_master_tb.v # Output files
+OUT_FILE = out
+# Nasty string concatenation trick to maintain consistency
+VCD_FILE = $(TB_SOURCE)cd # Default target: runs the simulation and opens the waveform
+all: wave # Compile the Verilog sources
+$(OUT_FILE): $(V_SOURCES) $(TB_SOURCE) iverilog -o $(OUT_FILE) $(TB_SOURCE) $(V_SOURCES) # Run the simulation to generate the VCD file
+$(VCD_FILE): $(OUT_FILE) vvp $(OUT_FILE) # Target to run the simulation
+sim: $(VCD_FILE) # Open the waveform in GTKWave
+wave: $(VCD_FILE) gtkwave $(VCD_FILE) &amp; # Clean up generated files
+clean: rm -f $(OUT_FILE) $(VCD_FILE)
+]]></description><link>root/digital-design/iverilog-&amp;-gtkwave-simulation.html</link><guid isPermaLink="false">root/Digital Design/Iverilog &amp; GtkWave Simulation.md</guid><pubDate>Thu, 02 Oct 2025 16:12:58 GMT</pubDate></item><item><title><![CDATA[GDB]]></title><description><![CDATA[g++ &lt;file-name&gt; -g -o &lt;executable-name&gt;-g debugging symbols
+-o output executablerun
+lay nextbr &lt;symbol (file,method,variable,line)&gt;info &lt;command&gt;
+info break : show breakpoints enable 1 : enable (ID of breakpoint)
+disable 1 : disable (ID of breakpoint)Overloaded functions when putting a breakpoint on an overloaded function GDB will put the breakpoints on all the functions of the same name
+print &lt;var&gt;
+inspect &lt;stl structure&gt;set &lt;var&gt; = &lt;value&gt;nsfincontinue or cneed -lpthread flag when compilinginfo threads or thswitching threads
+t &lt;id&gt; backtrace of the thread
+btswitching frames
+f &lt;id&gt;b &lt;function&gt; if &lt;variable&gt; &lt;operator&gt; &lt;value&gt;break on function if condition met--release and --g flagscompiler optimization flags-03
+-02
+-01 (Default) -g3 debugging with optimiation level 3
+]]></description><link>root/debugging/gdb.html</link><guid isPermaLink="false">root/Debugging/GDB.md</guid><pubDate>Thu, 02 Oct 2025 16:05:14 GMT</pubDate></item><item><title><![CDATA[01 AHB-Lite Protocol]]></title><link>root/digital-design/interconnect/01-ahb-lite-protocol.html</link><guid isPermaLink="false">root/Digital Design/Interconnect/01 AHB-Lite Protocol.md</guid><pubDate>Thu, 02 Oct 2025 13:06:44 GMT</pubDate></item></channel></rss>
