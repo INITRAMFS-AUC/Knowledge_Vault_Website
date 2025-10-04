@@ -374,28 +374,28 @@ def add_custom_fonts_to_html():
     <style>
         @font-face {
             font-family: 'ZedMono Nerd Font';
-            src: url('../custom_fonts/ZedMonoNerdFont-Regular.ttf') format('truetype');
+            src: url('/custom_fonts/ZedMonoNerdFont-Regular.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
         
         @font-face {
             font-family: 'ZedMono Nerd Font';
-            src: url('../custom_fonts/ZedMonoNerdFont-Bold.ttf') format('truetype');
+            src: url('/custom_fonts/ZedMonoNerdFont-Bold.ttf') format('truetype');
             font-weight: bold;
             font-style: normal;
         }
         
         @font-face {
             font-family: 'ZedMono Nerd Font';
-            src: url('../custom_fonts/ZedMonoNerdFont-Italic.ttf') format('truetype');
+            src: url('/custom_fonts/ZedMonoNerdFont-Italic.ttf') format('truetype');
             font-weight: normal;
             font-style: italic;
         }
         
         @font-face {
             font-family: 'ZedMono Nerd Font';
-            src: url('../custom_fonts/ZedMonoNerdFont-BoldItalic.ttf') format('truetype');
+            src: url('/custom_fonts/ZedMonoNerdFont-BoldItalic.ttf') format('truetype');
             font-weight: bold;
             font-style: italic;
         }
