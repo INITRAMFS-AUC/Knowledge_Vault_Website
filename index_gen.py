@@ -13,13 +13,33 @@ def generate_index():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Knowledge Vault Index</title>
-    <link rel="stylesheet" href="./site-lib/fonts/ZedMonoNerdFont-Regular.woff2" as="font" type="font/woff2" crossorigin>
     <style>
         @font-face {
             font-family: 'ZedMono Nerd Font';
-            src: url('./site-lib/fonts/ZedMonoNerdFont-Regular.woff2') format('woff2');
+            src: url('./custom_fonts/ZedMonoNerdFont-Regular.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'ZedMono Nerd Font';
+            src: url('./custom_fonts/ZedMonoNerdFont-Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'ZedMono Nerd Font';
+            src: url('./custom_fonts/ZedMonoNerdFont-Italic.ttf') format('truetype');
+            font-weight: normal;
+            font-style: italic;
+        }
+        
+        @font-face {
+            font-family: 'ZedMono Nerd Font';
+            src: url('./custom_fonts/ZedMonoNerdFont-BoldItalic.ttf') format('truetype');
+            font-weight: bold;
+            font-style: italic;
         }
         
         :root {
@@ -44,6 +64,10 @@ def generate_index():
             --light-accent-hover: #458588;
             --light-border: #d5c4a1;
             --light-code-bg: #f2e5bc;
+        }
+        
+        * {
+            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body {
@@ -74,6 +98,8 @@ def generate_index():
             padding-bottom: 10px;
             border-bottom: 2px solid;
             transition: border-color 0.3s;
+            font-family: 'ZedMono Nerd Font', monospace;
+            font-weight: bold;
         }
         
         body.dark h1 {
@@ -97,6 +123,7 @@ def generate_index():
             padding: 10px;
             border-radius: 50%;
             transition: background-color 0.3s;
+            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body.dark .theme-toggle {
@@ -119,6 +146,7 @@ def generate_index():
             padding: 15px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             transition: background-color 0.3s, box-shadow 0.3s;
+            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body.dark .directory {
@@ -137,6 +165,7 @@ def generate_index():
             font-size: 1.2em;
             display: flex;
             align-items: center;
+            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         .folder-icon {
@@ -154,10 +183,12 @@ def generate_index():
         ul {
             list-style-type: none;
             padding-left: 20px;
+            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         li {
             margin-bottom: 8px;
+            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         a {
@@ -166,6 +197,7 @@ def generate_index():
             padding: 5px 10px;
             border-radius: 4px;
             transition: background-color 0.3s, color 0.3s;
+            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body.dark a {
@@ -202,6 +234,7 @@ def generate_index():
             margin-bottom: 20px;
             font-size: 0.9em;
             transition: color 0.3s;
+            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body.dark .breadcrumb {
@@ -218,6 +251,7 @@ def generate_index():
             border-radius: 8px;
             font-size: 0.9em;
             transition: background-color 0.3s, color 0.3s;
+            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body.dark .stats {
