@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import re
 
 def generate_index():
     # Define the base directory
@@ -67,7 +68,7 @@ def generate_index():
         }
         
         * {
-            font-family: 'ZedMono Nerd Font', monospace;
+            font-family: 'ZedMono Nerd Font', monospace !important;
         }
         
         body {
@@ -364,5 +365,75 @@ def generate_index():
     
     print("index.html has been generated successfully!")
 
+def add_custom_fonts_to_html():
+    # Define the base directory
+    base_dir = Path("./root")
+    
+    # Define the custom font CSS
+    font_css = """
+    <style>
+        @font-face {
+            font-family: 'ZedMono Nerd Font';
+            src: url('../custom_fonts/ZedMonoNerdFont-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'ZedMono Nerd Font';
+            src: url('../custom_fonts/ZedMonoNerdFont-Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'ZedMono Nerd Font';
+            src: url('../custom_fonts/ZedMonoNerdFont-Italic.ttf') format('truetype');
+            font-weight: normal;
+            font-style: italic;
+        }
+        
+        @font-face {
+            font-family: 'ZedMono Nerd Font';
+            src: url('../custom_fonts/ZedMonoNerdFont-BoldItalic.ttf') format('truetype');
+            font-weight: bold;
+            font-style: italic;
+        }
+        
+        * {
+            font-family: 'ZedMono Nerd Font', monospace !important;
+        }
+    </style>
+    """
+    
+    # Find all HTML files in the directory
+    html_files = list(base_dir.rglob("*.html"))
+    
+    for html_file in html_files:
+        # Read the HTML file
+        with open(html_file, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Check if the font CSS is already added
+        if "ZedMono Nerd Font" in content:
+            print(f"Font already applied to {html_file}")
+            continue
+        
+        # Find the position to insert the font CSS (after the <head> tag)
+        head_match = re.search(r'<head[^>]*>', content)
+        if head_match:
+            insert_pos = head_match.end()
+            # Insert the font CSS
+            modified_content = content[:insert_pos] + font_css + content[insert_pos:]
+            
+            # Write the modified content back to the file
+            with open(html_file, 'w', encoding='utf-8') as f:
+                f.write(modified_content)
+            
+            print(f"Font added to {html_file}")
+        else:
+            print(f"Could not find <head> tag in {html_file}")
+
 if __name__ == "__main__":
     generate_index()
+    add_custom_fonts_to_html()
