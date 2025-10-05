@@ -16,7 +16,7 @@ def generate_index():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studies Index</title>
+    <title>InitRamFS Index</title>
     <link rel="stylesheet" href="./custom_fonts/ZedMonoNerdFont-Regular.ttf" as="font" type="font/ttf" crossorigin>
     <style>
         @font-face {
@@ -262,7 +262,7 @@ def generate_index():
     </button>
     
     <div class="container">
-        <h1>Studies Index</h1>
+        <h1>InitRamFS Index</h1>
         <div class="breadcrumb">Home</div>
 """
 
