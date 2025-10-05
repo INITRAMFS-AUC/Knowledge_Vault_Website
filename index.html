@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Knowledge Vault Index</title>
+    <title>Studies Index</title>
+    <link rel="stylesheet" href="./custom_fonts/ZedMonoNerdFont-Regular.ttf" as="font" type="font/ttf" crossorigin>
     <style>
         @font-face {
             font-family: 'ZedMono Nerd Font';
@@ -58,10 +59,6 @@
             --light-code-bg: #f2e5bc;
         }
         
-        * {
-            font-family: 'ZedMono Nerd Font', monospace !important;
-        }
-        
         body {
             font-family: 'ZedMono Nerd Font', monospace;
             line-height: 1.6;
@@ -90,8 +87,6 @@
             padding-bottom: 10px;
             border-bottom: 2px solid;
             transition: border-color 0.3s;
-            font-family: 'ZedMono Nerd Font', monospace;
-            font-weight: bold;
         }
         
         body.dark h1 {
@@ -115,7 +110,6 @@
             padding: 10px;
             border-radius: 50%;
             transition: background-color 0.3s;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body.dark .theme-toggle {
@@ -138,7 +132,6 @@
             padding: 15px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             transition: background-color 0.3s, box-shadow 0.3s;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body.dark .directory {
@@ -157,7 +150,6 @@
             font-size: 1.2em;
             display: flex;
             align-items: center;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         .folder-icon {
@@ -175,12 +167,10 @@
         ul {
             list-style-type: none;
             padding-left: 20px;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         li {
             margin-bottom: 8px;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         a {
@@ -189,7 +179,6 @@
             padding: 5px 10px;
             border-radius: 4px;
             transition: background-color 0.3s, color 0.3s;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body.dark a {
@@ -226,7 +215,6 @@
             margin-bottom: 20px;
             font-size: 0.9em;
             transition: color 0.3s;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body.dark .breadcrumb {
@@ -243,7 +231,6 @@
             border-radius: 8px;
             font-size: 0.9em;
             transition: background-color 0.3s, color 0.3s;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body.dark .stats {
@@ -263,24 +250,24 @@
     </button>
     
     <div class="container">
-        <h1>Knowledge Vault Index</h1>
-        <div class="breadcrumb">Home / site-lib</div>
+        <h1>Studies Index</h1>
+        <div class="breadcrumb">Home</div>
 <div class="directory" style="margin-left: 20px;">
 <div class="directory-title"><span class="folder-icon">📁</span>debugging</div>
-<div class="breadcrumb">Home / root / debugging</div>
+<div class="breadcrumb">Home / Home / debugging</div>
 <ul>
     <li><a href="root/debugging/gdb.html"><span class="file-icon">📄</span>Gdb</a></li>
 </ul>
 </div>
 <div class="directory" style="margin-left: 20px;">
 <div class="directory-title"><span class="folder-icon">📁</span>digital-design</div>
-<div class="breadcrumb">Home / root / digital-design</div>
+<div class="breadcrumb">Home / Home / digital-design</div>
 <ul>
     <li><a href="root/digital-design/iverilog-&-gtkwave-simulation.html"><span class="file-icon">📄</span>Iverilog-&-Gtkwave-Simulation</a></li>
 </ul>
 <div class="directory" style="margin-left: 40px;">
 <div class="directory-title"><span class="folder-icon">📁</span>interconnect</div>
-<div class="breadcrumb">Home / root / digital-design / interconnect</div>
+<div class="breadcrumb">Home / Home / digital-design / interconnect</div>
 <ul>
     <li><a href="root/digital-design/interconnect/00-basic-1-to-1-interconnect.html"><span class="file-icon">📄</span>00-Basic-1-To-1-Interconnect</a></li>
     <li><a href="root/digital-design/interconnect/01-interconnect-fabric.html"><span class="file-icon">📄</span>01-Interconnect-Fabric</a></li>
@@ -290,7 +277,7 @@
 </div>
 <div class="directory" style="margin-left: 20px;">
 <div class="directory-title"><span class="folder-icon">📁</span>kws-soc-platform-project</div>
-<div class="breadcrumb">Home / root / kws-soc-platform-project</div>
+<div class="breadcrumb">Home / Home / kws-soc-platform-project</div>
 <ul>
     <li><a href="root/kws-soc-platform-project/kws-soc-hardware-requirements.html"><span class="file-icon">📄</span>Kws-Soc-Hardware-Requirements</a></li>
     <li><a href="root/kws-soc-platform-project/kws-soc-portal.html"><span class="file-icon">📄</span>Kws-Soc-Portal</a></li>
@@ -298,10 +285,10 @@
 </div>
 <div class="directory" style="margin-left: 20px;">
 <div class="directory-title"><span class="folder-icon">📁</span>models</div>
-<div class="breadcrumb">Home / root / models</div>
+<div class="breadcrumb">Home / Home / models</div>
 <div class="directory" style="margin-left: 40px;">
 <div class="directory-title"><span class="folder-icon">📁</span>neural-network-libraries-for-embedded-systems</div>
-<div class="breadcrumb">Home / root / models / neural-network-libraries-for-embedded-systems</div>
+<div class="breadcrumb">Home / Home / models / neural-network-libraries-for-embedded-systems</div>
 <ul>
     <li><a href="root/models/neural-network-libraries-for-embedded-systems/00-nnom.html"><span class="file-icon">📄</span>00-Nnom</a></li>
 </ul>
@@ -309,6 +296,7 @@
 </div>
 
         <div class="stats">
+            <p>Generated on: posix.times_result(user=0.01, system=0.01, children_user=0.0, children_system=0.0, elapsed=4571390.18)</p>
             <p>Total directories and files: 14</p>
         </div>
     </div>

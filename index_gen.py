@@ -1,10 +1,13 @@
 import os
-from pathlib import Path
 import re
+from pathlib import Path
 
 def generate_index():
-    # Define the base directory
+    # Define the base directory (root)
     base_dir = Path("./root")
+    
+    # Directories to exclude HTML files from
+    exclude_dirs = ["site-lib", "images", "venv", "custom_fonts"]
     
     # Start building the HTML content
     html_content = """
@@ -13,7 +16,8 @@ def generate_index():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Knowledge Vault Index</title>
+    <title>Studies Index</title>
+    <link rel="stylesheet" href="./custom_fonts/ZedMonoNerdFont-Regular.ttf" as="font" type="font/ttf" crossorigin>
     <style>
         @font-face {
             font-family: 'ZedMono Nerd Font';
@@ -67,10 +71,6 @@ def generate_index():
             --light-code-bg: #f2e5bc;
         }
         
-        * {
-            font-family: 'ZedMono Nerd Font', monospace !important;
-        }
-        
         body {
             font-family: 'ZedMono Nerd Font', monospace;
             line-height: 1.6;
@@ -99,8 +99,6 @@ def generate_index():
             padding-bottom: 10px;
             border-bottom: 2px solid;
             transition: border-color 0.3s;
-            font-family: 'ZedMono Nerd Font', monospace;
-            font-weight: bold;
         }
         
         body.dark h1 {
@@ -124,7 +122,6 @@ def generate_index():
             padding: 10px;
             border-radius: 50%;
             transition: background-color 0.3s;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body.dark .theme-toggle {
@@ -147,7 +144,6 @@ def generate_index():
             padding: 15px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             transition: background-color 0.3s, box-shadow 0.3s;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body.dark .directory {
@@ -166,7 +162,6 @@ def generate_index():
             font-size: 1.2em;
             display: flex;
             align-items: center;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         .folder-icon {
@@ -184,12 +179,10 @@ def generate_index():
         ul {
             list-style-type: none;
             padding-left: 20px;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         li {
             margin-bottom: 8px;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         a {
@@ -198,7 +191,6 @@ def generate_index():
             padding: 5px 10px;
             border-radius: 4px;
             transition: background-color 0.3s, color 0.3s;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body.dark a {
@@ -235,7 +227,6 @@ def generate_index():
             margin-bottom: 20px;
             font-size: 0.9em;
             transition: color 0.3s;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body.dark .breadcrumb {
@@ -252,7 +243,6 @@ def generate_index():
             border-radius: 8px;
             font-size: 0.9em;
             transition: background-color 0.3s, color 0.3s;
-            font-family: 'ZedMono Nerd Font', monospace;
         }
         
         body.dark .stats {
@@ -272,12 +262,12 @@ def generate_index():
     </button>
     
     <div class="container">
-        <h1>Knowledge Vault Index</h1>
-        <div class="breadcrumb">Home / site-lib</div>
+        <h1>Studies Index</h1>
+        <div class="breadcrumb">Home</div>
 """
 
     # Function to recursively process directories
-    def process_directory(directory, level=0, breadcrumb="root"):
+    def process_directory(directory, level=0, breadcrumb="Home"):
         nonlocal html_content
         
         # Get all items in the directory
@@ -287,15 +277,19 @@ def generate_index():
         dirs = [item for item in items if item.is_dir()]
         files = [item for item in items if item.is_file() and item.suffix.lower() == '.html']
         
+        # Check if current directory is in the exclude list
+        dir_name = directory.name
+        should_exclude_files = dir_name in exclude_dirs
+        
         # Add directory title if not the root
         if level > 0:
-            dir_name = directory.name.replace('\\', '')
+            dir_name_display = dir_name.replace('\\', '')
             html_content += f'<div class="directory" style="margin-left: {level * 20}px;">\n'
-            html_content += f'<div class="directory-title"><span class="folder-icon">📁</span>{dir_name}</div>\n'
+            html_content += f'<div class="directory-title"><span class="folder-icon">📁</span>{dir_name_display}</div>\n'
             html_content += f'<div class="breadcrumb">Home / {breadcrumb}</div>\n'
         
-        # Add files
-        if files:
+        # Add files (only if not in excluded directories)
+        if files and not should_exclude_files:
             html_content += '<ul>\n'
             for file in files:
                 file_path = file.relative_to(Path('.'))
@@ -318,6 +312,7 @@ def generate_index():
     # Add stats section
     html_content += """
         <div class="stats">
+            <p>Generated on: """ + str(os.times()) + """</p>
             <p>Total directories and files: """ + str(len(list(base_dir.rglob("*")))) + """</p>
         </div>
     </div>
@@ -367,49 +362,16 @@ def generate_index():
 
 def add_custom_fonts_to_html():
     # Define the base directory
-    base_dir = Path("./root")
-    
-    # Define the custom font CSS
-    font_css = """
-    <style>
-        @font-face {
-            font-family: 'ZedMono Nerd Font';
-            src: url('/custom_fonts/ZedMonoNerdFont-Regular.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-        
-        @font-face {
-            font-family: 'ZedMono Nerd Font';
-            src: url('/custom_fonts/ZedMonoNerdFont-Bold.ttf') format('truetype');
-            font-weight: bold;
-            font-style: normal;
-        }
-        
-        @font-face {
-            font-family: 'ZedMono Nerd Font';
-            src: url('/custom_fonts/ZedMonoNerdFont-Italic.ttf') format('truetype');
-            font-weight: normal;
-            font-style: italic;
-        }
-        
-        @font-face {
-            font-family: 'ZedMono Nerd Font';
-            src: url('/custom_fonts/ZedMonoNerdFont-BoldItalic.ttf') format('truetype');
-            font-weight: bold;
-            font-style: italic;
-        }
-        
-        * {
-            font-family: 'ZedMono Nerd Font', monospace !important;
-        }
-    </style>
-    """
+    base_dir = Path(".")
     
     # Find all HTML files in the directory
     html_files = list(base_dir.rglob("*.html"))
     
     for html_file in html_files:
+        # Skip index.html as it already has the font
+        if html_file.name == "index.html":
+            continue
+            
         # Read the HTML file
         with open(html_file, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -418,6 +380,52 @@ def add_custom_fonts_to_html():
         if "ZedMono Nerd Font" in content:
             print(f"Font already applied to {html_file}")
             continue
+        
+        # Calculate the relative path from the HTML file to the custom_fonts directory
+        # This is the key fix - we need to determine how many directories up we need to go
+        relative_path = html_file.relative_to(Path('.'))
+        depth = len(relative_path.parts) - 1  # -1 because we don't count the file itself
+        
+        # Create the correct path with the right number of "../"
+        path_prefix = "../" * depth
+        font_path = f"{path_prefix}custom_fonts"
+        
+        # Define the custom font CSS with the correct path
+        font_css = f"""
+    <style>
+        @font-face {{
+            font-family: 'ZedMono Nerd Font';
+            src: url('{font_path}/ZedMonoNerdFont-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }}
+        
+        @font-face {{
+            font-family: 'ZedMono Nerd Font';
+            src: url('{font_path}/ZedMonoNerdFont-Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }}
+        
+        @font-face {{
+            font-family: 'ZedMono Nerd Font';
+            src: url('{font_path}/ZedMonoNerdFont-Italic.ttf') format('truetype');
+            font-weight: normal;
+            font-style: italic;
+        }}
+        
+        @font-face {{
+            font-family: 'ZedMono Nerd Font';
+            src: url('{font_path}/ZedMonoNerdFont-BoldItalic.ttf') format('truetype');
+            font-weight: bold;
+            font-style: italic;
+        }}
+        
+        * {{
+            font-family: 'ZedMono Nerd Font', monospace !important;
+        }}
+    </style>
+    """
         
         # Find the position to insert the font CSS (after the <head> tag)
         head_match = re.search(r'<head[^>]*>', content)
@@ -430,7 +438,7 @@ def add_custom_fonts_to_html():
             with open(html_file, 'w', encoding='utf-8') as f:
                 f.write(modified_content)
             
-            print(f"Font added to {html_file}")
+            print(f"Font added to {html_file} with path: {font_path}")
         else:
             print(f"Could not find <head> tag in {html_file}")
 
