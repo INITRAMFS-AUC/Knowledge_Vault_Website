@@ -311,11 +311,6 @@ def generate_index():
     
     # Add stats section
     html_content += """
-        <div class="stats">
-            <p>Generated on: """ + str(os.times()) + """</p>
-            <p>Total directories and files: """ + str(len(list(base_dir.rglob("*")))) + """</p>
-        </div>
-    </div>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
